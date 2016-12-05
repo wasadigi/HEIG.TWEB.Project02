@@ -19,50 +19,71 @@ module.exports = function (grunt) {
             expand: true,
             cwd: 'node_modules/bootstrap/scss/',
             src: '**',
-            dest: 'static/scss/bootstrap'
+            dest: 'static/styles/bootstrap'
          },
          zone: {
             expand: true,
             cwd: 'node_modules/zone.js/dist/',
             src: 'zone.js',
-            dest: 'static/public/js/angular/dependencies'
+            dest: 'static/public/angular/dependencies'
          },
          reflect: {
             expand: true,
             cwd: 'node_modules/reflect-metadata/',
             src: 'Reflect.js',
-            dest: 'static/public/js/angular/dependencies'
+            dest: 'static/public/angular/dependencies'
          },
          system: {
             expand: true,
             cwd: 'node_modules/systemjs/dist/',
             src: 'system.src.js',
-            dest: 'static/public/js/angular/dependencies'
+            dest: 'static/public/angular/dependencies'
          },
          rxjs: {
             expand: true,
             cwd: 'node_modules/',
             src: 'rxjs/**',
-            dest: 'static/public/js/angular/dependencies'
+            dest: 'static/public/angular/dependencies'
          },
          angularBundles: {
             expand: true,
             cwd: 'node_modules/',
             src: '@angular/**',
-            dest: 'static/public/js/angular/dependencies/'
+            dest: 'static/public/angular/dependencies/'
+         },
+         angularTemplates: {
+            expand: true,
+            cwd: 'static/angular/',
+            src: '**/*.html',
+            dest: 'static/public/angular/'
+         },
+         systemjsConfig: {
+            expand: true,
+            cwd: 'static/angular/',
+            src: 'systemjs.config.js',
+            dest: 'static/public/angular/'
          }
       },
       sass: {
-         dist: {
+         bootstrap: {
             files: {
-               'static/public/css/styles.css': 'static/scss/styles.scss'
+               'static/public/styles/styles.css': 'static/styles/styles.scss'
             }
+         },
+         angular: {
+            files: [{
+               expand: true,
+               cwd: 'static/angular/',
+               src: ['**/*.scss'],
+               dest: 'static/public/angular',
+               ext: '.css'
+            }]
          }
       },
       ts: {
-         default : {
-            src: 'static/ts/angular/app/**/*.ts',
-            dest: 'static/public/js/angular/app/',
+         angular : {
+            src: 'static/angular/app/**/*.ts',
+            dest: 'static/public/angular/app/',
             options: {
                target: 'es6',
                module: 'commonjs',
@@ -79,6 +100,10 @@ module.exports = function (grunt) {
          }
       },
       watch: {
+         options: {
+            spawn: false,
+            livereload: { liveCSS: false }  // disable CSS injection
+         },
          jsBackend: {
             files: [
                'app.js',
@@ -87,9 +112,11 @@ module.exports = function (grunt) {
             ],
             tasks: ['develop', 'delayed-livereload']
          },
-         jsFrontend: {
+         frontend: {
             files: [
-               'static/public/js/**/*.js'
+               'static/public/**/*.js',
+               'static/public/**/*.html',
+               'static/public/**/*.css'
             ],
             options: {
                livereload: reloadPort
@@ -97,7 +124,7 @@ module.exports = function (grunt) {
          },
          css: {
             files: [
-               'static/scss/*.scss'
+               'static/styles/*.scss'
             ],
             tasks: ['sass'],
             options: {
@@ -114,9 +141,21 @@ module.exports = function (grunt) {
          },
          ts: {
             files: [
-               'static/ts/**/*.ts'
+               'static/angular/**/*.ts'
             ],
             tasks: ['ts']
+         },
+         angularTemplates: {
+            files: [
+               'static/angular/**/*.html'
+            ],
+            tasks: ['copy:angularTemplates']
+         },
+         angularStyles: {
+            files: [
+               'static/angular/**/*.scss'
+            ],
+            tasks: ['sass:angular']
          }
       }
    });
