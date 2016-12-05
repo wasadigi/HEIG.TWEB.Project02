@@ -1,3 +1,6 @@
+### Public files should be genereted by grunt
+/static/public/
+### JetBrains
 /.idea
 # Created by .ignore support plugin (hsz.mobi)
 ### Linux template
