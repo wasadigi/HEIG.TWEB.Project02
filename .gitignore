@@ -17,6 +17,8 @@
 ### Sass template
 .sass-cache/
 *.css.map
+### Typescript
+.tscache/
 ### macOS template
 *.DS_Store
 .AppleDouble
